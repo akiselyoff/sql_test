@@ -1,18 +1,22 @@
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: 'happymak.mysql.tools',
   user: 'happymak_petsearch',
   password: ';2xK94Us(k',
   database: 'happymak_petsearch',
 });
 
-connection.connect();
+pool.getConnection((err, connection) => {
+  if (err) throw error;
+  const query = 'CREATE TABLE testPool(Id INT,Age INT,FirstName VARCHAR(20),LastName VARCHAR(20))';
 
-connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results[0].solution);
+  connection.query(query, function (err, results, fields) {
+    console.log(results);
+    connection.release();
+    if (err) {
+      connection.destroy();
+      throw error;
+    }
+  });
 });
-
-connection.end(err =>
-  err ? console.log(`Connection end with error: ${err}`) : console.log(`Connection successfully end`)
-);
