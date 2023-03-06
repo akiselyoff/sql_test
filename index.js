@@ -24,7 +24,7 @@ db.connect(err => {
 });
 
 //Create DB
-//Use when databse option in createConnection was absent
+//Use for create new db if databse option in createConnection was absent
 
 // app.get('/createdb', (req, res) => {
 //   let sql = 'CREATE DATABASE TestMySQL';
@@ -37,14 +37,19 @@ db.connect(err => {
 //     res.send('Database created...');
 //   });
 // });
+app.get('/', (req, res) => {
+  console.log('Home page is ok');
+  res.send('Home Page');
+});
 
 app.get('/create_table', (req, res) => {
   let sql =
-    'CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY_KEY, firstname VARCHAR(30), lastname VARCHAR(30), age INT';
+    'CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, firstname VARCHAR(30), lastname VARCHAR(30), age INT)';
 
   db.query(sql, (err, results) => {
     if (err) {
-      throw error;
+      console.log(err);
+      throw err;
     }
     console.log(results);
     res.send('Table created...');
